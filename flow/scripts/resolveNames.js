@@ -1,7 +1,7 @@
 const fcl = require('@onflow/fcl');
 
 // Sends in an address, .find. or .fn and returns an address.
-const resolveAddressObject = async (lookup) => {
+const toAddress = async (lookup) => {
   let answer = lookup;
   let rootLookup = lookup.split('.')[0];
   let type = lookup.split('.')[1];
@@ -30,6 +30,66 @@ const resolveAddressObject = async (lookup) => {
   } catch (e) {
     console.log('Error: ' + e);
     return null;
+  }
+}
+
+const resolveAddressObject = async (lookup) => {
+  let answer = {
+    resolvedNames: {
+      find: "",
+      fn: ""
+    },
+    address: ""
+  };
+  let rootLookup = lookup.split('.')[0];
+  try {
+    if (rootLookup.length > 14) {
+      answer.address = lookup;
+      answer.resolvedNames.find = await fcl.query({
+        cadence: addressToFind,
+        args: (arg, t) => [
+          arg(lookup, t.Address)
+        ]
+      });
+
+      answer.resolvedNames.fn = await fcl.query({
+        cadence: addressToFN,
+        args: (arg, t) => [
+          arg(lookup, t.Address)
+        ]
+      });
+    } else if (lookup.includes('.find')) {
+      answer.resolvedNames.find = lookup;
+      answer.address = await fcl.query({
+        cadence: findToAddress,
+        args: (arg, t) => [
+          arg(rootLookup, t.String)
+        ]
+      })
+      answer.resolvedNames.fn = await fcl.query({
+        cadence: addressToFN,
+        args: (arg, t) => [
+          arg(answer.address, t.Address)
+        ]
+      });
+    } else if (lookup.includes('.fn')) {
+      answer.resolvedNames.fn = lookup;
+      answer.address = await fcl.query({
+        cadence: fnToAddress,
+        args: (arg, t) => [
+          arg(rootLookup, t.String)
+        ]
+      })
+      answer.resolvedNames.find = await fcl.query({
+        cadence: addressToFind,
+        args: (arg, t) => [
+          arg(answer.address, t.Address)
+        ]
+      });
+    }
+    return answer;
+  } catch (e) {
+    return answer;
   }
 }
 
@@ -94,6 +154,7 @@ pub fun main(name: String): Address? {
 `;
 
 module.exports = {
+  toAddress,
   resolveAddressObject
 }
 

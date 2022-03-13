@@ -1,7 +1,7 @@
 const { getFloatInfo } = require('../flow/scripts/getFloatInfo.js');
 
 const execute = async (interaction, options) => {
-    let float = await getFloatInfo(options.getString('address'), options.getNumber('eventid'));
+    let float = await getFloatInfo(options.getString('address'), options.getNumber('floatid'));
     if (float.error) {
         interaction.reply({ ephemeral: true, content: float.message }).catch(e => console.log(e));
         return;
@@ -13,7 +13,7 @@ const postFloat = (interaction, float) => {
     const embed = {
         color: '#5bc595',
         title: float.eventName,
-        url: `https://mainnet.floats.city/${float.eventHost}/${float.eventId}`,
+        url: `https://mainnet.floats.city/${float.owner}/float/${float.id}`,
         author: {
             name: 'FLOAT',
             url: 'https://mainnet.floats.city/',

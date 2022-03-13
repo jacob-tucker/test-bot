@@ -7,22 +7,26 @@ const execute = async (interaction, options) => {
       return;
   }
 
-  let eventId = options.getNumber('eventid');
-  verifyFloatButton(interaction, eventId, role.id);
+  let creator = options.getString('creator');
+  let groupName = options.getString('groupname');
+  verifyGroupButton(interaction, creator, groupName, role.id);
 }
 
-const verifyFloatButton = (interaction, eventId, roleId) => {
+const verifyGroupButton = (interaction, creator, groupName, roleId) => {
     const row = new MessageActionRow()
         .addComponents(
             new MessageButton()
-                .setCustomId(`verifyFloat-${eventId}-${roleId}`)
+                .setCustomId(`verifyGroup-${creator}-${groupName}-${roleId}`)
                 .setLabel('Verify')
                 .setStyle('SUCCESS')
         );
 
     const embed = new MessageEmbed()
         .setColor('#5bc595')
-        .setTitle(`Verify you own a FLOAT from Event #${eventId}`)
+        .setTitle(`Verify you own a FLOAT from ${groupName}`)
+        .addFields(
+            { name: 'Created by', value: creator },
+        )
         .setAuthor('Emerald City', 'https://i.imgur.com/YbmTuuW.png', 'https://discord.gg/emeraldcity')
         .setDescription('Click the `Verify` button below to get the ' + `<@&${roleId}>` + ' role with your EmeraldID.')
         .setThumbnail('https://i.imgur.com/UgE8FJl.png');
@@ -31,7 +35,7 @@ const verifyFloatButton = (interaction, eventId, roleId) => {
 }
 
 module.exports = {
-    name: 'setupfloatverifier',
+    name: 'groupverifier',
     description: 'setup a role verification with emeraldid',
     execute: execute,
 }

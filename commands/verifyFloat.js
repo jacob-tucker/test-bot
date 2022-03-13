@@ -3,8 +3,8 @@ const { checkOwnsFloat } = require('../flow/scripts/checkOwnsFloat.js');
 const execute = async (interaction, options) => {
     let eventId = options[0];
     let roleId = options[1];
-    let ownsFloat = await checkOwnsFloat('0x6c0d53c676256e8c', eventId);
-    if (ownsFloat) {
+    let ownsFloat = await checkOwnsFloat('0xda09c74f322859e2', eventId);
+    if (ownsFloat === true) {
         interaction.member.roles.add(roleId).catch((e) => console.log(e));
         interaction.reply({ content: "You have been given the " + `<@&${roleId}>` + " role.", ephemeral: true });
     } else {

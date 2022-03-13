@@ -14,6 +14,7 @@ fcl.config()
   .put('0xFLOAT', '0x0afe396ebc8eee65')
   .put('0xFIND', '0xa16ab1d0abde3625')
   .put('0xFN', '0xb05b2abb42335e88')
+  .put('0xNFT', '0x631e88ae7f1d7c20')
 
 const port = process.env.PORT || 5000;
 
@@ -54,8 +55,8 @@ client.once('ready', () => {
         type: Constants.ApplicationCommandOptionTypes.STRING
       },
       {
-        name: 'eventid',
-        description: 'The ID of the Event',
+        name: 'floatid',
+        description: 'The ID of the FLOAT',
         required: true,
         type: Constants.ApplicationCommandOptionTypes.NUMBER
       }
@@ -63,12 +64,12 @@ client.once('ready', () => {
   });
 
   commands?.create({
-    name: 'setupfloatverifier',
+    name: 'floatverifier',
     description: 'Setup a button to verify a user owns a FLOAT from a specified Event and give them a role for it.',
     options: [
       {
         name: 'eventid',
-        description: 'The users address',
+        description: 'The id of the event',
         required: true,
         type: Constants.ApplicationCommandOptionTypes.NUMBER
       },
@@ -79,7 +80,81 @@ client.once('ready', () => {
         type: Constants.ApplicationCommandOptionTypes.ROLE
       }
     ]
-  })
+  });
+
+  commands?.create({
+    name: 'groupverifier',
+    description: 'Setup a button to verify a user owns a FLOAT from a certain group of FLOAT Events.',
+    options: [
+      {
+        name: 'creator',
+        description: 'The Group creators address',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'groupname',
+        description: 'The name of the Group',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'role',
+        description: 'The role you wish to give',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.ROLE
+      }
+    ]
+  });
+
+  commands?.create({
+    name: 'resolve',
+    description: 'Resolve a .find or .fn name.',
+    options: [
+      {
+        name: 'account',
+        description: 'An address, .find, or .fn name.',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      }
+    ]
+  });
+
+  commands?.create({
+    name: 'nftverifier',
+    description: 'Setup a button to verify a user owns a NFT from a certain collection.',
+    options: [
+      {
+        name: 'contractname',
+        description: 'The name of the contract',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'contractaddress',
+        description: 'The address of the contract',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'publicpath',
+        description: 'The public path to the collection',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'role',
+        description: 'The role you wish to give',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.ROLE
+      }
+    ]
+  });
+
+  commands?.create({
+    name: 'god',
+    description: 'Take a look at God.'
+  });
 })
 
 // When a user types a message

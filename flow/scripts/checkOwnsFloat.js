@@ -10,9 +10,9 @@ const checkOwnsFloat = async (account, eventId) => {
         fcl.arg(parseInt(eventId), t.UInt64)
       ])
     ]).then(fcl.decode);
-
     return result;
   } catch(e) {
+    console.log(e)
     return {error: true, message: 'You do not own this FLOAT.'};
   }
 }
