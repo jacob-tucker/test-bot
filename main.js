@@ -6,6 +6,7 @@ const fcl = require("@onflow/fcl");
 
 const express = require('express');
 const float = require('./commands/float');
+const { checkEmeraldID } = require('./flow/scripts/checkEmeraldID');
 
 const app = express();
 
@@ -15,6 +16,7 @@ fcl.config()
   .put('0xFIND', '0xa16ab1d0abde3625')
   .put('0xFN', '0xb05b2abb42335e88')
   .put('0xNFT', '0x631e88ae7f1d7c20')
+  .put('0xEmeraldID', '0xfe433270356d985c')
 
 const port = process.env.PORT || 5000;
 
@@ -173,8 +175,16 @@ client.on('messageCreate', message => {
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isButton()) {
+    // Check the interactor's EmeraldID (null if they don't have one)
+    const account = await checkEmeraldID(interaction.member.id);
+    console.log("Returned account from ecid", account);
+    if (!account) {
+      client.commands.get('initializeEmeraldID').execute(interaction);
+      return;
+    }
+
     let customIdArray = interaction.customId.split('-');
-    let commandName = customIdArray.shift();
+    const commandName = customIdArray.shift();
     client.commands.get(commandName).execute(interaction, customIdArray);
   } 
   else if (interaction.isCommand()) {

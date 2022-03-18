@@ -37,7 +37,7 @@ const checkOwnsNFT = async (contractName, contractAddress, publicPath, user) => 
     return result;
   } catch(e) {
     console.log(e)
-    return {error: true, message: 'You do not own this FLOAT.'};
+    return {error: true, message: 'You do not own this NFT.'};
   }
 }
 
