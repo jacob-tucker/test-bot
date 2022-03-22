@@ -5,18 +5,17 @@ const fs = require('fs');
 const fcl = require("@onflow/fcl");
 
 const express = require('express');
-const float = require('./commands/float');
 const { checkEmeraldID } = require('./flow/scripts/checkEmeraldID');
 
 const app = express();
 
 fcl.config()
-  .put('accessNode.api', 'https://testnet.onflow.org')
-  .put('0xFLOAT', '0x0afe396ebc8eee65')
-  .put('0xFIND', '0xa16ab1d0abde3625')
-  .put('0xFN', '0xb05b2abb42335e88')
-  .put('0xNFT', '0x631e88ae7f1d7c20')
-  .put('0xEmeraldID', '0xfe433270356d985c')
+  .put('accessNode.api', 'https://mainnet.onflow.org')
+  // .put('0xFLOAT', '0x0afe396ebc8eee65')
+  .put('0xFIND', '0x097bafa4e0b48eef')
+  .put('0xFN', '0x233eb012d34b0070')
+  .put('0xNFT', '0x1d7e57aa55817448')
+  .put('0xEmeraldIdentity', '0x39e42c67cc851cfb')
 
 const port = process.env.PORT || 5000;
 
@@ -37,14 +36,14 @@ for (const file of commandFiles) {
 client.once('ready', () => {
   console.log('Emerald bot is online!');
 
-  const guildId = '927688041919807558'; // Use your guild ID instead
-  const guild = client.guilds.cache.get(guildId);
-  let commands;
-  if (guild) {
-    commands = guild.commands;
-  } else {
-    commands = client.application?.commands;
-  }
+  // const guildId = '927688041919807558'; // Use your guild ID instead
+  // const guild = client.guilds.cache.get(guildId);
+  let commands = client.application?.commands;
+  // if (guild) {
+  //   commands = guild.commands;
+  // } else {
+  //   commands = client.application?.commands;
+  // }
 
   commands?.create({
     name: 'float',
@@ -154,6 +153,25 @@ client.once('ready', () => {
   });
 
   commands?.create({
+    name: 'customverifier',
+    description: 'Setup a button to verify a user owns a Custom entity.',
+    options: [
+      {
+        name: 'customname',
+        description: 'The custom name',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.STRING
+      },
+      {
+        name: 'role',
+        description: 'The role you wish to give',
+        required: true,
+        type: Constants.ApplicationCommandOptionTypes.ROLE
+      }
+    ]
+  });
+
+  commands?.create({
     name: 'god',
     description: 'Take a look at God.'
   });
@@ -183,12 +201,12 @@ client.on('interactionCreate', async interaction => {
       return;
     }
 
-    let customIdArray = interaction.customId.split('-');
+    let customIdArray = interaction.customId.split('-').concat(account);
     const commandName = customIdArray.shift();
     client.commands.get(commandName).execute(interaction, customIdArray);
-  } 
+  }
   else if (interaction.isCommand()) {
-    const {commandName, options} = interaction;
+    const { commandName, options } = interaction;
     console.log(options)
     client.commands.get(commandName).execute(interaction, options);
   }

@@ -1,47 +1,7 @@
-const nft = ({ contractName, contractAddress, path }) => {
+const find = () => {
   return `
-      import NonFungibleToken from 0x1d7e57aa55817448
-      import ${contractName} from ${contractAddress}
-      pub fun main(address: Address): Int {
-          if let collection = getAccount(address).getCapability(${path}).borrow<&${contractName}.Collection{NonFungibleToken.CollectionPublic}>() {
-              return collection.getIDs().length
-          } else {
-              if let collectionPublic = getAccount(address).getCapability(${path}).borrow<&{NonFungibleToken.CollectionPublic}>() {
-                  if collectionPublic.getType().identifier == "A.${contractAddress.slice(2)}.${contractName}.Collection" {
-                      return collectionPublic.getIDs().length
-                  }
-              }
-          }
-
-          return -1
-      }
-  `;
-}
-
-const ft = ({ contractName, contractAddress, path }) => {
-  return `
-      import FungibleToken from 0xf233dcee88fe0abe
-      import ${contractName} from ${contractAddress}
-      pub fun main(address: Address): UFix64 {
-          if let vault = getAccount(address).getCapability(${path}).borrow<&${contractName}.Vault{FungibleToken.Balance}>() {
-              return vault.balance
-          } else {
-              if let vaultPublic = getAccount(address).getCapability(${path}).borrow<&{FungibleToken.Balance}>() {
-                  if vaultPublic.getType().identifier == "A.${contractAddress.slice(2)}.${contractName}.Vault" {
-                      return vaultPublic.balance
-                  }
-              }
-          }
-
-          return 0.0
-      }
-  `;
-}
-
-const find = (guildInfo) => {
-  return `
-      import FIND from 0x097bafa4e0b48eef
-      import Profile from 0x097bafa4e0b48eef
+      import FIND from 0xFIND
+      import Profile from 0xFIND
 
       pub fun main(address: Address): Int {
 
@@ -84,7 +44,7 @@ const find = (guildInfo) => {
   `;
 }
 
-const geniacemetalmaneki = (guildInfo) => {
+const geniacemetalmaneki = () => {
   return `
       import GeniaceNFT from 0xabda6627c70c7f52
       
@@ -105,7 +65,7 @@ const geniacemetalmaneki = (guildInfo) => {
   `;
 }
 
-const geniacemanekigems = (guildInfo) => {
+const geniacemanekigems = () => {
   return `
       import GeniaceNFT from 0xabda6627c70c7f52
       
@@ -126,7 +86,7 @@ const geniacemanekigems = (guildInfo) => {
   `;
 }
 
-const geniaceiconsofanime = (guildInfo) => {
+const geniaceiconsofanime = () => {
   return `
       import GeniaceNFT from 0xabda6627c70c7f52
       
@@ -147,7 +107,7 @@ const geniaceiconsofanime = (guildInfo) => {
   `;
 }
 
-const flovatar = (guildInfo) => {
+const flovatar = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -161,7 +121,7 @@ const flovatar = (guildInfo) => {
   `;
 }
 
-const flovatarape = (guildInfo) => {
+const flovatarape = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -184,7 +144,7 @@ const flovatarape = (guildInfo) => {
   `;
 }
 
-const flovatardevil = (guildInfo) => {
+const flovatardevil = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -207,7 +167,7 @@ const flovatardevil = (guildInfo) => {
   `;
 }
 
-const flovatarflotrotter = (guildInfo) => {
+const flovatarflotrotter = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -231,7 +191,7 @@ const flovatarflotrotter = (guildInfo) => {
   `;
 }
 
-const flovatardroid = (guildInfo) => {
+const flovatardroid = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -255,7 +215,7 @@ const flovatardroid = (guildInfo) => {
   `;
 }
 
-const flovatarracer = (guildInfo) => {
+const flovatarracer = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -279,7 +239,7 @@ const flovatarracer = (guildInfo) => {
   `;
 }
 
-const flovatarcat = (guildInfo) => {
+const flovatarcat = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -302,7 +262,7 @@ const flovatarcat = (guildInfo) => {
   `;
 }
 
-const flovatarnaked = (guildInfo) => {
+const flovatarnaked = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -325,7 +285,7 @@ const flovatarnaked = (guildInfo) => {
   `;
 }
 
-const flovatarundead = (guildInfo) => {
+const flovatarundead = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -349,7 +309,7 @@ const flovatarundead = (guildInfo) => {
   `;
 }
 
-const flovatarpower = (guildInfo) => {
+const flovatarpower = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -373,7 +333,7 @@ const flovatarpower = (guildInfo) => {
   `;
 }
 
-const flovatarstarbattle = (guildInfo) => {
+const flovatarstarbattle = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -398,7 +358,7 @@ const flovatarstarbattle = (guildInfo) => {
   `;
 }
 
-const flovatarsuit = (guildInfo) => {
+const flovatarsuit = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -423,7 +383,7 @@ const flovatarsuit = (guildInfo) => {
   `;
 }
 
-const flovatarfind = (guildInfo) => {
+const flovatarfind = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       import FIND from 0x097bafa4e0b48eef
@@ -477,7 +437,7 @@ const flovatarfind = (guildInfo) => {
   `;
 }
 
-const flovatargirlpower = (guildInfo) => {
+const flovatargirlpower = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -506,7 +466,7 @@ const flovatargirlpower = (guildInfo) => {
   `;
 }
 
-const flovatarstoner = (guildInfo) => {
+const flovatarstoner = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -532,7 +492,7 @@ const flovatarstoner = (guildInfo) => {
   `;
 }
 
-const flovatarmustache = (guildInfo) => {
+const flovatarmustache = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -556,7 +516,7 @@ const flovatarmustache = (guildInfo) => {
   `;
 }
 
-const flovatarfirst100 = (guildInfo) => {
+const flovatarfirst100 = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -579,7 +539,7 @@ const flovatarfirst100 = (guildInfo) => {
   `;
 }
 
-const flovatarastronaut = (guildInfo) => {
+const flovatarastronaut = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -603,7 +563,7 @@ const flovatarastronaut = (guildInfo) => {
   `;
 }
 
-const flovatarlegendary = (guildInfo) => {
+const flovatarlegendary = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -626,7 +586,7 @@ const flovatarlegendary = (guildInfo) => {
   `;
 }
 
-const flovatargray = (guildInfo) => {
+const flovatargray = () => {
   return `
       import Flovatar from 0x921ea449dffec68a
       
@@ -659,7 +619,7 @@ const flovatargray = (guildInfo) => {
   `;
 }
 
-const dropchasepartner = (guildInfo) => {
+const dropchasepartner = () => {
   return `
       import Dropchase from 0x328670be4971a064
           pub fun main(account: Address): Int {
@@ -687,7 +647,7 @@ const dropchasepartner = (guildInfo) => {
   `
 }
 
-const coolcatstotal = (guildInfo) => {
+const coolcatstotal = () => {
   return `
   import TopShot from 0x0b2a3299cc857e29
 
@@ -710,7 +670,7 @@ const coolcatstotal = (guildInfo) => {
   `;
 }
 
-const coolcatsunique = (guildInfo) => {
+const coolcatsunique = () => {
   return `
   import TopShot from 0x0b2a3299cc857e29
 
@@ -735,9 +695,20 @@ const coolcatsunique = (guildInfo) => {
   `
 }
 
+const emeraldid = () => {
+  return `
+  import EmeraldIdentity from 0xEmeraldIdentity
+
+  pub fun main(user: Address): Bool {
+    if EmeraldIdentity.getDiscordFromAccount(account: user) != nil {
+      return true
+    }
+    return false
+  }
+  `
+}
+
 const holdingScripts = {
-  nft,
-  ft,
   find,
   geniacemetalmaneki,
   geniacemanekigems,
@@ -764,7 +735,8 @@ const holdingScripts = {
   flovatargray,
   dropchasepartner,
   coolcatstotal,
-  coolcatsunique
+  coolcatsunique,
+  emeraldid
 }
 
 module.exports = {

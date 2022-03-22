@@ -3,9 +3,9 @@ const { checkOwnsCustom } = require('../flow/scripts/checkOwnsCustom.js');
 const execute = async (interaction, options) => {
     const customName = options[0];
     const roleId = options[1];
-    const user = '0xda09c74f322859e2';
+    const user = options[2];
     const ownsCustom = await checkOwnsCustom(customName, user);
-    if (ownsCustom === true) {
+    if (ownsCustom === true || ownsCustom > 0) {
         interaction.member.roles.add(roleId).catch((e) => console.log(e));
         interaction.reply({ content: "You have been given the " + `<@&${roleId}>` + " role.", ephemeral: true });
     } else {
@@ -16,6 +16,6 @@ const execute = async (interaction, options) => {
 
 module.exports = {
     name: 'verifyCustom',
-    description: 'verifies if a user has a custom entity that is pre-defined in ./flow/holdings/holdings.js',
+    description: 'verifies if a user has a custom entity that is pre-defined in ./flow/holdings/nftholdings.js',
     execute: execute,
 }

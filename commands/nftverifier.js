@@ -1,16 +1,18 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed, Permissions } = require('discord.js');
 
 const execute = async (interaction, options) => {
-  const role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
-  if (!role) {
-      interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
-      return;
-  }
+    if (interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+        const role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
+        if (!role) {
+            interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
+            return;
+        }
 
-  const contractName  = options.getString('contractname');
-  const contractAddress = options.getString('contractaddress');
-  const publicPath = options.getString('publicpath');
-  verifyNFTButton(interaction, contractName, contractAddress, publicPath, role.id);
+        const contractName = options.getString('contractname');
+        const contractAddress = options.getString('contractaddress');
+        const publicPath = options.getString('publicpath');
+        verifyNFTButton(interaction, contractName, contractAddress, publicPath, role.id);
+    }
 }
 
 const verifyNFTButton = (interaction, contractName, contractAddress, publicPath, roleId) => {
@@ -19,7 +21,11 @@ const verifyNFTButton = (interaction, contractName, contractAddress, publicPath,
             new MessageButton()
                 .setCustomId(`verifyNFT-${contractName}-${contractAddress}-${publicPath}-${roleId}`)
                 .setLabel('Verify')
-                .setStyle('SUCCESS')
+                .setStyle('SUCCESS'),
+            new MessageButton()
+                .setURL('https://id.ecdao.org' + '/reset')
+                .setLabel('Reset')
+                .setStyle('LINK')
         );
 
     const embed = new MessageEmbed()

@@ -1,15 +1,17 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed, Permissions } = require('discord.js');
 
 const execute = async (interaction, options) => {
-  let role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
-  if (!role) {
-      interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
-      return;
-  }
+    if (interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+        let role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
+        if (!role) {
+            interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
+            return;
+        }
 
-  let creator = options.getString('creator');
-  let groupName = options.getString('groupname');
-  verifyGroupButton(interaction, creator, groupName, role.id);
+        let creator = options.getString('creator');
+        let groupName = options.getString('groupname');
+        verifyGroupButton(interaction, creator, groupName, role.id);
+    }
 }
 
 const verifyGroupButton = (interaction, creator, groupName, roleId) => {
@@ -18,7 +20,11 @@ const verifyGroupButton = (interaction, creator, groupName, roleId) => {
             new MessageButton()
                 .setCustomId(`verifyGroup-${creator}-${groupName}-${roleId}`)
                 .setLabel('Verify')
-                .setStyle('SUCCESS')
+                .setStyle('SUCCESS'),
+            new MessageButton()
+                .setURL('https://id.ecdao.org' + '/reset')
+                .setLabel('Reset')
+                .setStyle('LINK')
         );
 
     const embed = new MessageEmbed()

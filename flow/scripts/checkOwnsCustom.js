@@ -1,9 +1,9 @@
 const fcl = require('@onflow/fcl');
 const t = require('@onflow/types');
-import { holdingScripts } from '../holdings/holdings';
+const { holdingScripts } = require('../holdings/nftholdings');
 
 const checkOwnsCustom = async (customName, user) => {
-  const scriptCode = holdingScripts(customName.toLowerCase());
+  const scriptCode = holdingScripts[customName.toLowerCase()];
 
   try {
     const result = await fcl.send([
@@ -12,10 +12,11 @@ const checkOwnsCustom = async (customName, user) => {
         fcl.arg(user, t.Address),
       ])
     ]).then(fcl.decode);
+    console.log(result);
     return result;
-  } catch(e) {
+  } catch (e) {
     console.log(e)
-    return {error: true, message: 'You do not own this Custom entity.'};
+    return { error: true, message: 'You do not own this Custom entity.' };
   }
 }
 

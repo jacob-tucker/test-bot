@@ -4,7 +4,7 @@ const execute = async (interaction, options) => {
     const creator = options[0];
     const groupName = options[1];
     const roleId = options[2];
-    const user = '0xda09c74f322859e2';
+    const user = options[3];
     const ownsFloatInGroup = await checkOwnsFloatFromGroup(creator, groupName, user);
     if (ownsFloatInGroup === true) {
         interaction.member.roles.add(roleId).catch((e) => console.log(e));

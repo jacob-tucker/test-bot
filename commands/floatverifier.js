@@ -1,14 +1,16 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed, Permissions } = require('discord.js');
 
 const execute = async (interaction, options) => {
-  let role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
-  if (!role) {
-      interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
-      return;
-  }
+    if (interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+        let role = interaction.guild.roles.cache.find(role => role === options.getRole('role'));
+        if (!role) {
+            interaction.reply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
+            return;
+        }
 
-  let eventId = options.getNumber('eventid');
-  verifyFloatButton(interaction, eventId, role.id);
+        let eventId = options.getNumber('eventid');
+        verifyFloatButton(interaction, eventId, role.id);
+    }
 }
 
 const verifyFloatButton = (interaction, eventId, roleId) => {
@@ -17,7 +19,11 @@ const verifyFloatButton = (interaction, eventId, roleId) => {
             new MessageButton()
                 .setCustomId(`verifyFloat-${eventId}-${roleId}`)
                 .setLabel('Verify')
-                .setStyle('SUCCESS')
+                .setStyle('SUCCESS'),
+            new MessageButton()
+                .setURL('https://id.ecdao.org' + '/reset')
+                .setLabel('Reset')
+                .setStyle('LINK')
         );
 
     const embed = new MessageEmbed()

@@ -5,7 +5,7 @@ const execute = async (interaction, options) => {
     const contractAddress = options[1];
     const publicPath = options[2];
     const roleId = options[3];
-    const user = '0xda09c74f322859e2';
+    const user = options[4];
     const ownsNFT = await checkOwnsNFT(contractName, contractAddress, publicPath, user);
     if (ownsNFT === true) {
         interaction.member.roles.add(roleId).catch((e) => console.log(e));
