@@ -259,8 +259,10 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-const takeRoles = (message) => {
+const takeRoles = async (message) => {
     console.log(message);
+    const discord = await checkEmeraldIDFromAccount(message.address);
+    /* TODO: REMOVE ROLES FROM THE `discord` var ABOVE */
 };
 
 const receiveEvent = (message) => {
