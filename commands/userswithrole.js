@@ -1,14 +1,16 @@
-const { MessageAttachment } = require('discord.js');
+const { MessageAttachment, Permissions } = require('discord.js');
 const { checkEmeraldIDBatch } = require('../flow/scripts/checkEmeraldID');
 
 const execute = async (interaction, options) => {
-  await interaction.deferReply({ ephemeral: true });
-  const role = options.getRole('role');
-  if (!role) {
-    await interaction.editReply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
-    return;
+  if (interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
+    await interaction.deferReply({ ephemeral: true });
+    const role = options.getRole('role');
+    if (!role) {
+      await interaction.editReply({ ephemeral: true, content: 'This role does not exist.' }).catch(e => console.log(e));
+      return;
+    }
+    sendInfo(interaction, role);
   }
-  sendInfo(interaction, role);
 }
 
 const sendInfo = async (interaction, role) => {
@@ -34,7 +36,31 @@ const sendInfo = async (interaction, role) => {
   const csv = csvmaker(fields);
 
   const userList = new MessageAttachment(Buffer.from(csv), 'users.csv');
-  await interaction.editReply({content: `Users with the <@&${role.id}> role:`, files: [userList]});
+  await interaction.editReply({ content: `Users with the <@&${role.id}> role:`, files: [userList] });
+}
+
+const csvmaker = function (data) {
+
+  // Empty array for storing the values
+  csvRows = [];
+
+  // Headers is basically a keys of an
+  // object which is id, name, and
+  // profession
+  const headers = Object.keys(data);
+
+  // As for making csv format, headers
+  // must be separated by comma and
+  // pushing it into array
+  csvRows.push(headers.join(','));
+
+  // Pushing Object values into array
+  // with comma separation
+  const values = Object.values(data).join(',');
+  csvRows.push(values)
+
+  // Returning the array joining with new line
+  return csvRows.join('\n')
 }
 
 module.exports = {

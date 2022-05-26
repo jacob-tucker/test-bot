@@ -43,7 +43,7 @@ const resolveAddressObject = async (lookup) => {
   };
   let rootLookup = lookup.split('.')[0];
   try {
-    if (rootLookup.length > 14) {
+    if (rootLookup.length === 18 && rootLookup.substring(0, 2) === '0x') {
       answer.address = lookup;
       answer.resolvedNames.find = await fcl.query({
         cadence: addressToFind,

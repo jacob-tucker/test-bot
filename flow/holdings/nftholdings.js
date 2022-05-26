@@ -779,6 +779,122 @@ const barteryardclub = () => {
   `
 }
 
+const abdholder = () => {
+  return `
+  import ABD from 0x67af7ecf76556cd3
+  pub fun main(address: Address): Bool {
+    // Attempts the normal way of looking at a collection
+    if let collection = getAccount(address).getCapability(/public/MomentCollection).borrow<&{ABD.MomentCollectionPublic}>() {
+      if collection.getIDs().length > 0 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const abdlegendary = () => {
+  return `
+  import ABD from 0x67af7ecf76556cd3
+  pub fun main(address: Address): Bool {
+    // Attempts the normal way of looking at a collection
+    if let collection = getAccount(address).getCapability(/public/MomentCollection).borrow<&{ABD.MomentCollectionPublic}>() {
+      for id in collection.getIDs() {
+        if id >= 1 && id <= 150 {
+          return true
+        }
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const fabricantitemnft = () => {
+  return `
+  import ItemNFT from 0xfc91de5e6566cc7c
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(ItemNFT.CollectionPublicPath).borrow<&{ItemNFT.ItemCollectionPublic}>() {
+      if collection.getIDs().length > 0 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const fabricants1itemnft = () => {
+  return `
+  import TheFabricantS1ItemNFT from 0x09e03b1f871b3513
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(TheFabricantS1ItemNFT.CollectionPublicPath).borrow<&{TheFabricantS1ItemNFT.ItemCollectionPublic}>() {
+      if collection.getIDs().length > 0 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const fabricants2itemnft = () => {
+  return `
+  import TheFabricantS2ItemNFT from 0x7752ea736384322f
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(TheFabricantS2ItemNFT.CollectionPublicPath).borrow<&{TheFabricantS2ItemNFT.ItemCollectionPublic}>() {
+      if collection.getIDs().length > 0 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const goobzwhale = () => {
+  return `
+  import GooberXContract from 0x34f2bf4a80bb0f69 
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(GooberXContract.CollectionPublicPath).borrow<&{GooberXContract.GooberCollectionPublic}>() {
+      if collection.getIDs().length >= 30 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const goobzmegawhale = () => {
+  return `
+  import GooberXContract from 0x34f2bf4a80bb0f69 
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(GooberXContract.CollectionPublicPath).borrow<&{GooberXContract.GooberCollectionPublic}>() {
+      if collection.getIDs().length >= 100 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
+const evolution = () => {
+  return `
+  import Evolution from 0xf4264ac8f3256818 
+  pub fun main(address: Address): Bool {
+    if let collection = getAccount(address).getCapability(/public/f4264ac8f3256818_Evolution_Collection).borrow<&{Evolution.EvolutionCollectionPublic}>() {
+      if collection.getIDs().length > 0 {
+        return true
+      }
+    } 
+    return false
+  }
+  `
+}
+
 const holdingScripts = {
   find,
   geniacemetalmaneki,
@@ -810,7 +926,15 @@ const holdingScripts = {
   emeraldid,
   flowversesock,
   communityisutility,
-  barteryardclub
+  barteryardclub,
+  abdholder,
+  abdlegendary,
+  fabricantitemnft,
+  fabricants1itemnft,
+  fabricants2itemnft,
+  goobzwhale,
+  goobzmegawhale,
+  evolution
 }
 
 module.exports = {

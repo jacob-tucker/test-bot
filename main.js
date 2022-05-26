@@ -6,7 +6,6 @@ const fcl = require("@onflow/fcl");
 
 const express = require('express');
 const { checkEmeraldID } = require('./flow/scripts/checkEmeraldID');
-const { GraffleSDK } = require("./lib/graffle.js");
 
 const app = express();
 
@@ -21,7 +20,7 @@ fcl.config()
 const port = process.env.PORT || 5000;
 
 const prefix = '!';
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 
 // Gets all of our commands from our commands folder
 client.commands = new Collection();
@@ -48,7 +47,7 @@ client.once('ready', () => {
 
     commands?.create({
         name: 'resolve',
-        description: 'Resolve a .find or .fn name.',
+        description: 'Get information about a .find, .fn, or address.',
         options: [
             {
                 name: 'account',
@@ -221,6 +220,105 @@ client.once('ready', () => {
             }
         ]
     });
+
+    commands?.create({
+        name: 'groupverifier',
+        description: 'Setup a button to verify a user owns a FLOAT from a certain group of FLOAT Events.',
+        options: [
+            {
+                name: 'creator',
+                description: 'The Group creators address, .find, or .fn name',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'groupname',
+                description: 'The name of the Group',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'role',
+                description: 'The role you wish to give',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.ROLE
+            },
+            {
+                name: 'all',
+                description: 'If the user has to own ALL the FLOATs from this group',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN
+            }
+        ]
+    });
+
+    commands?.create({
+        name: 'tokenverifier',
+        description: 'Setup a button to verify a user owns X tokens from a certain vault.',
+        options: [
+            {
+                name: 'contractname',
+                description: 'The name of the contract',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'contractaddress',
+                description: 'The address of the contract',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'publicpath',
+                description: 'The public path to the vault',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'amount',
+                description: 'The amount of tokens the user must hold',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'role',
+                description: 'The role you wish to give',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.ROLE
+            }
+        ]
+    });
+
+    commands?.create({
+        name: 'randomfloats',
+        description: 'Get a random number of FLOAT claimers from your event.',
+        options: [
+            {
+                name: 'account',
+                description: 'The users address, .find, or .fn name',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'eventid',
+                description: 'The id of the event',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.STRING
+            },
+            {
+                name: 'number',
+                description: 'The number of claimers you would like to get',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.INTEGER
+            },
+            {
+                name: 'public',
+                description: 'Display results publically',
+                required: true,
+                type: Constants.ApplicationCommandOptionTypes.BOOLEAN
+            }
+        ]
+    });
 })
 
 // When a user types a message
@@ -233,7 +331,7 @@ client.on('messageCreate', message => {
     // Executes the youtube.js file
     if (command === 'test') {
         console.log("wtf")
-        message.channel.send('Testing!');
+        message.channel.send('Jacob is so talented, smart, and attractive. I was not forced to say this.').catch((e) => console.log(e));
     }
 });
 
@@ -243,39 +341,20 @@ client.on('interactionCreate', async interaction => {
         await interaction.deferReply({ ephemeral: true });
 
         // Check the interactor's EmeraldID (null if they don't have one)
-        const account = await checkEmeraldID(interaction.member.id);
-        console.log("EmeraldID", account);
-        if (!account) {
+        const emeraldIds = await checkEmeraldID(interaction.member.id);
+        console.log("EmeraldID", emeraldIds);
+        if (!emeraldIds) {
             client.commands.get('initializeEmeraldID')?.execute(interaction);
             return;
         }
-
-        let customIdArray = interaction.customId.split('-').concat(account);
+        let customIdArray = interaction.customId.replaceAll(" - ", " : ").split('-');
         const commandName = customIdArray.shift();
-        client.commands.get(commandName)?.execute(interaction, customIdArray);
+        client.commands.get(commandName)?.execute(interaction, customIdArray, emeraldIds);
     } else if (interaction.isCommand()) {
         const { commandName, options } = interaction;
         client.commands.get(commandName)?.execute(interaction, options);
     }
 });
-
-const takeRoles = async (message) => {
-    console.log(message);
-    const discord = await checkEmeraldIDFromAccount(message.address);
-    /* TODO: REMOVE ROLES FROM THE `discord` var ABOVE */
-};
-
-const receiveEvent = (message) => {
-    // `message` is the event
-    takeRoles(message);
-};
-
-function createStream() {
-    const streamSDK = new GraffleSDK();
-    streamSDK.stream(receiveEvent);
-}
-
-createStream();
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
